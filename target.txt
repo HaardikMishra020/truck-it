@@ -1,0 +1,5 @@
+Date:-05-07-2024
+1) UI Improve
+2) Date Countdown lgana hai(countdown optional lg jaye toh)...2 dates use krni hai...1 date of delivery jo display hogi...2nd vo date jiske baad vo load DB se remove ho jayega not shown to truckers anymore.
+3) Authentication and Authorization (truckers, load owners, admin)
+4) Admin ka dashboard (saare truckers, loads ko manipulate kr ske)
