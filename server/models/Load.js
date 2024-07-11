@@ -1,7 +1,8 @@
 const mongoose=require('mongoose');
+const User=require('../models/User');
 
 const loadSchema=new mongoose.Schema({
-    owner:String,
+    owner:{type:mongoose.Schema.Types.ObjectId,ref:'User'},
     source:String,
     destination:String,
     distance:Number,
@@ -12,6 +13,7 @@ const loadSchema=new mongoose.Schema({
     rate:Number,
     isBooked:Boolean,
     remark:String,
+    expdate: Date,
     // expireAt:{type: Date,
     //     default: Date.now,
     //     expires: '10m'}

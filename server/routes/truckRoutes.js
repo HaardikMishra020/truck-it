@@ -1,8 +1,10 @@
 const express=require('express');
-const { showTrucks, addTruck } = require('../controllers/Truck');
+const { showTrucks, addTruck, deleteTruck } = require('../controllers/Truck');
+const { checkAuth } = require('../middlewares/middleware');
 const router=express.Router();
 
-router.get('/',showTrucks);
-router.post('/',addTruck);
+router.get('/',checkAuth,showTrucks);
+router.post('/',checkAuth,addTruck);
+router.delete('/:id',deleteTruck);
 
 module.exports=router;

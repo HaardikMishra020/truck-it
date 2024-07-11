@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,6 +18,7 @@ const AddTruck = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  const token=localStorage.getItem('token');
   const navigate=useNavigate();
 
   const handleSubmit = async(e) => {
@@ -27,10 +28,11 @@ const AddTruck = () => {
         body: JSON.stringify(formData),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
+          'Authorization': `Bearer ${token}`,
         },
       })
         .then((response) => response.json())
-        .then((json) => console.log(json)).then(navigate('/'));
+        .then((json) => console.log(json)).then(navigate('/dashboard'));
     // Handle form submission logic
     console.log(formData);
   };
@@ -84,13 +86,13 @@ const AddTruck = () => {
     </div>
   </div>
   <div className="mb-5 flex flex-row justify-between">
-    <div className="flex flex-col">
+    <div className="flex flex-col flex-grow mr-2">
       <label htmlFor="yom" className='mb-2 text-sm font-medium text-gray-900 dark:text-white'> Enter Year of Manufacture</label>
       <input type="number" id="yom" name="yom" min="1900" max={new Date().getFullYear()} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"placeholder="2024" onChange={handleChange} required />
     </div>
-    <div className='flex flex-col'>
+    <div className='flex flex-col flex-grow ml-2'>
       <label htmlFor="capacity" className='mb-2 text-sm font-medium text-gray-900 dark:text-white'> Enter Capacity (in tons)</label>
-      <input type="number" id="capacity" name="capacity" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="100" onChange={handleChange} required />
+      <input type="number" id="capacity" name="capacity"  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="100" onChange={handleChange} required />
     </div>
   </div>
       
@@ -98,7 +100,7 @@ const AddTruck = () => {
   <div className="mb-5 flex flex-row justify-between">
     <div className="flex flex-col flex-grow mr-2 ">
       <label htmlFor="availability" className='mb-2 text-sm font-medium text-gray-900 dark:text-white'> Enter Availability</label>
-    <select name="availability" id="availability" className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-100% p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' onChange={handleChange} required>
+    <select name="availability" id="availability" className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' onChange={handleChange} required>
         <option value="true">Yes</option>
         <option value="false">No</option>
         </select>

@@ -11,6 +11,8 @@ import AdminLoad from './Pages/AdminLoad'
 import AddTruck from './Pages/AddTruck'
 import AllTrucks from './Pages/AllTrucks'
 import AdminTrucks from './Pages/AdminTruck'
+import AdminUsers from './Pages/AdminUsers'
+import Hero from './Pages/Hero'
 // import Catalogue from './components/Catalogue'
 
 function App() {
@@ -19,7 +21,8 @@ function App() {
     <>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Main/>}/>
+        <Route path='/' element={<Hero/>}/>
+        <Route path="/dashboard" element={<Main/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/truck/">
@@ -33,6 +36,7 @@ function App() {
           <Route path="" element={<AdminDash/>}/>
           <Route path ="loads" element={<AdminLoad/>}/>
           <Route path ="trucks" element={<AdminTrucks/>}/>
+          <Route path="users" element={<AdminUsers/>}/>
         </Route>
         <Route path="*" element={<NotFound/>}/>
 

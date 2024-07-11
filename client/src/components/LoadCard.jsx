@@ -1,5 +1,21 @@
+import axios from "axios";
 
 const LoadCard = (props) => {
+  const isAdmin=props.isAdmin;
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.delete(`http://localhost:8080/load/${props.id}`);
+      if (response.status === 200) {
+        alert('Load deleted successfully');
+        // Optionally, you can refresh the list or call a parent function to update the UI
+        props.onDelete(props.id);
+      }
+    } catch (error) {
+      console.error('Error deleting load:', error);
+      alert('Failed to delete load');
+    }
+  };
   return (
     <div className="border w-full max-w-sm md:w-1/2 lg:w-1/3 mx-3 rounded-lg shadow-lg mt-5 dark:shadow-blue-900">
       <div className="flex flex-col items-center md:items-start px-6 py-4">
@@ -22,6 +38,7 @@ const LoadCard = (props) => {
             <li>Material: {props.material}</li>
             <li>Weight: {props.weight} Tonne</li>
             <li>Lorry Required: {props.lorry}</li>
+            <li>Shipping Date: {props.date}</li>
             
           </ul>
         </div>
@@ -30,7 +47,11 @@ const LoadCard = (props) => {
       <div className="flex flex-col items-center md:items-start bg-gray-100 px-6 py-3 rounded-lg dark:bg-blue-100">
         <h2 className="font-bold text-2xl mb-2">Rs.{props.rate} per tonne/km</h2>
         <p className="text-gray-600 dark:text-gray-600">Owner: {props.owner}</p>
-        <button className="bg-blue-600 px-4 py-2 mt-3 rounded font-semibold text-white hover:bg-blue-700">Bid Now</button>
+        <div className="flex flex-row">
+        <button className="bg-blue-600 px-4 py-2 mt-3 mr-2 rounded font-semibold text-white hover:bg-blue-700">Contact</button>
+        {isAdmin&&
+          <button onClick={handleDelete} className="bg-red-600 px-4 py-2 mt-3 ml-2 rounded font-semibold text-white hover:bg-blue-700">Delete</button>}
+          </div>
       </div>
     </div>
     

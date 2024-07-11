@@ -2,6 +2,8 @@ const Load=require('../models/Load')
 const moment=require('moment');
 const {getCoordinates}=require('../middlewares/middleware');
 const {haversineDistance}=require('../middlewares/middleware')
+
+//Adding the load in DB.
 const addLoad=async(req,res)=>{
     try{
     const load=req.body;
@@ -17,11 +19,15 @@ const addLoad=async(req,res)=>{
     // var date2=new Date(load.date);
     // var ms=date.getTime()-date2.getTime();
     // console.log(ms/(1000*60*60));
-    
+
+
+    //formatting the date
     load.date=moment.utc(load.date).local().format('YYYY-MM-DDTHH:mm:SS.sss');
+    //calculating haversine distance bw 2 coordinates
     const distance=Math.ceil(haversineDistance(sourcecoord.latitude,sourcecoord.longitude,desticoord.latitude,desticoord.longitude));
     const owner="Tony Stark"
-    const response=await Load.create({...load,isBooked:false,distance:distance,owner:owner});
+    //appending few other attributes to object to be inserted in DB.
+    const response=await Load.create({...load,isBooked:false,distance:distance,owner:req.user.userId});
     // await Load.create(load);
     // console.log('DONE INSERTING ONE');
     }
@@ -39,10 +45,11 @@ const editLoad=async(req,res)=>{
     }
 }
 
+//to delete load.
 const deleteLoad=async(req,res)=>{
     try{
-        const load=req.body;
-        const response=await Load.deleteOne({_id:load._id});
+        const loadId=req.params.id;
+        await Load.findByIdAndDelete(loadId);
         console.log('deleted one load entry');
         res.status(200).json({msg:"Load Deleted Successfully"});
     }
@@ -65,7 +72,12 @@ const deleteAll=async(req,res)=>{
 
 const showLoads=async(req,res)=>{
     try{
-        const response=await Load.find({});
+        const response=await Load.find({}).populate('owner');
+        response.forEach(item=>{
+            const dated=moment(item.date).format("dddd, MMMM Do YYYY, h:mm:ss a");
+            item.date=dated;
+        })
+        
         res.json(response);
     }
     catch(err){

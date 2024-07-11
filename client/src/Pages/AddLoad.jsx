@@ -1,3 +1,4 @@
+//importing req libraries and components
 import Navbar from "../components/Navbar"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -5,7 +6,11 @@ import cities from '../../cities'
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react'
 
 const AddLoad = () => {
+
+    //useNavigate for navigating without user interaction
     const navigate=useNavigate();
+
+    //state variables to store load attributes and search query
     const [source,setSource]=useState('');
     const [destination,setDestination]=useState("");
     const [material,setMaterial]=useState("");
@@ -13,28 +18,42 @@ const AddLoad = () => {
     const [lorry,setLorry]=useState("");
     const [rate,setRate]=useState(0);
     const [date,setDate]=useState(0);
+    const [expdate,setExpdate]=useState(0);
     const [remark,setRemark]=useState("");
     const [query, setQuery] = useState('')
 
+  //to check if query len >=3 then only filter the cities. Means atleast 3 letters to be typed in query for autocomplete type thing.
   const filteredCities =
     query.length<3?[]:
       cities.filter((city) => {
           return city.name.toLowerCase().includes(query.toLowerCase())
         });
+
+
     const handleSubmit = async (e)=>{
+
+        //event object e has method preventDefault() to prevent default functioning of a component like forms, links etc
         e.preventDefault();
+
+        //object of all the form data to be sent to server/DB.
         const formData={
-            source,destination,material,weight,lorry,rate,date,remark
+            source,destination,material,weight,lorry,rate,date,expdate,remark
         };
+        const token=localStorage.getItem('token');
+
+        //POSTING load data to server using fetch
         await fetch('http://localhost:8080/load', {
             method: 'POST',
+            //JSON object needs to be stringified to be sent over the connection
             body: JSON.stringify(formData),
             headers: {
               'Content-type': 'application/json; charset=UTF-8',
+              'Authorization': `Bearer ${token}`,
             },
           })
+            //using .then() to handle promises. Converting response to json, consoling it and navigate to home.
             .then((response) => response.json())
-            .then((json) => console.log(json)).then(navigate('/'));
+            .then((json) => console.log(json)).then(navigate('/dashboard'));
     }
   return (
     <div>
@@ -92,9 +111,14 @@ const AddLoad = () => {
   <div className="mb-5">
     <label htmlFor="lorrytype" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Lorry Type </label>
     <select name="lorrytype" id="lorrytype" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={(e)=>setLorry(e.target.value)}>
-        <option value="Lorry1">L1</option>
-        <option value="Lorry2">L2</option>
-        <option value="Lorry3">L3</option>
+                <option value="">Select Type</option>
+                <option value="MCV">MCV</option>
+                <option value="HCV">HCV</option>
+                <option value="MAV">MAV</option>
+                <option value="Tipper">Tipper</option>
+                <option value="Refrigerated Truck">Refrigerated Truck</option>
+                <option value="Tractor Trailer">Tractor Trailer</option>
+                <option value="Tankers">Tanker</option>
     </select>
   </div>
   <div className="mb-5">
@@ -104,6 +128,10 @@ const AddLoad = () => {
   <div className="mb-5">
     <label htmlFor="date" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Loading Date</label>
     <input type="datetime-local" id="date" name="date" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" value={date}  onChange={(e) => setDate(e.target.value)} required />
+  </div>
+  <div className="mb-5">
+    <label htmlFor="expdate" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Expiration Date</label>
+    <input type="datetime-local" id="expdate" name="expdate" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" value={expdate}  onChange={(e) => setExpdate(e.target.value)} required />
   </div>
   <div className="mb-5">
   <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Additional Remark</label>

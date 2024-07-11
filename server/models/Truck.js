@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const TruckSchema = new mongoose.Schema({
+  owner:{type:mongoose.Schema.Types.ObjectId,ref:'User'},
   registrationNumber: {
     type: String,
     required: true,
@@ -32,7 +33,7 @@ const TruckSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: 1,
-    max: 100,
+    max: 200,
   },
   fuelType: {
     type: String,
@@ -42,6 +43,7 @@ const TruckSchema = new mongoose.Schema({
   },
   availability: {
     type: String,
+    default:true,
   },
 });
 
